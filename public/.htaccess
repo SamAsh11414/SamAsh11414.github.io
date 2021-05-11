@@ -1,0 +1,29 @@
+ErrorDocument 404 /404.php
+#force www
+RewriteCond %{HTTP_HOST} !^$
+RewriteCond %{HTTP_HOST} !^www\. [NC]
+RewriteCond %{HTTPS}s ^on(s)|
+RewriteRule ^ http%1://www.%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+RewriteEngine On
+RewriteCond %{SCRIPT_FILENAME} !-d
+RewriteRule ^([^\.]+)$ $1.php [NC,L]
+
+#NOTE: The items below are not part of the remove .html or .php but I think you should use them as the optimize the proformace or your site. You can delete them if you like.
+
+#Compress php script
+<ifModule mod_php4.c>
+php_value zlib.output_compression 16386
+</ifModule>
+
+#Spell Checker
+<IfModule mod_speling.c>
+CheckSpelling On
+</IfModule>
+
+#Protecting php.cgi
+<FilesMatch "^php5?\.(ini|cgi)$">
+Order Deny,Allow
+Deny from All
+Allow from env=REDIRECT_STATUS
+</FilesMatch>
